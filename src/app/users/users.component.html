@@ -1,0 +1,68 @@
+<h2>Users</h2>
+<button (click)="showUserForm = !showUserForm" class="btn btn-dark mb-3">Add User</button>
+<div class="card card-body mb-3" *ngIf="showUserForm">
+    <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
+        <div class="form-group">
+            <label>First Name</label>
+            <input type="text" [(ngModel)]="user.firstName" class="form-control" name="firstName" #userFirstName = "ngModel">
+        </div>
+        <!-- {{user.firstName}} -->
+        <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" [(ngModel)]="user.lastName" class="form-control" name="lastName" #userLastName = "ngModel">
+        </div>
+        <div class="form-group">
+            <label>Age</label>
+            <input type="number" [(ngModel)]="user.age" class="form-control" name="age" #userAge = "ngModel">
+        </div>
+        <div class="form-group">
+            <label>Place</label>
+            <input type="text" [(ngModel)]="user.address.place" class="form-control" name="place" #userAddressPlace = "ngModel">
+        </div>
+        <div class="form-group">
+            <label>City</label>
+            <input type="text" [(ngModel)]="user.address.city" class="form-control" name="city" #userAddressCity = "ngModel">
+        </div>
+        <div class="form-group">
+            <label>Profile</label>
+            <input type="text" [(ngModel)]="user.profile" class="form-control" name="profile" #userProfile = "ngModel">
+        </div>
+        <div class="form-group">
+            <label>Salary</label>
+            <input type="number" [(ngModel)]="user.salary" class="form-control" name="salary" #userSalary = "ngModel">
+        </div>
+        <button  class="btn btn-light btn-block mb-3" [ngClass]="currentClasses" >Add New User</button>
+    </form>
+</div>
+<ul class="list-unstyled" *ngIf="loaded && users?.length > 0; else noUsers">
+    <li class="card card-body mb-2" *ngFor='let user of users' [class.bg-light]="user.isActive" [style.border-color]="user.isActive ? 'green' : ''" >
+        <div class="row">
+            <div class="col-sm-4">
+                <img class="img-fluid" [src]="user.image" alt="">
+                <!-- <img class="img-fluid" src="{{user.image}}" alt=""> -->
+                <!-- <img class="img-fluid" bind-src="user.image" alt=""> -->
+            </div>
+            <div class="col-sm-8">
+                <!-- <h3 [ngStyle] = "currentStyles" >{{ user.firstName | uppercase }} {{user.lastName | lowercase}}</h3> -->
+                <h3 [ngStyle] = "currentStyles" >{{ user.firstName}} {{user.lastName}}
+                    <small><button (click)="toggleHide(user)" class="btn btn-dark btn-sm"><i [ngClass]="user.hide ? 'fa fa-plus':'fa fa-minus'"></i></button></small>
+                </h3>
+                <ul *ngIf="!user.hide && showExtended">
+                    <!-- print extra information if it is true -->
+                    <li class="list-group-item">Age: {{user.age}}</li>
+                    <li class="list-group-item">Address: {{user.address.place}}, {{user.address.state}}</li>
+                    <li class="list-group-item">Profile: {{user.profile}} </li>
+                    <li class="list-group-item">Salary: {{user.salary | currency:"₹"}} </li>
+                    <li class="list-group-item">Joined on: {{user.registered | date}} </li>
+                </ul>
+            </div>
+        </div>
+    </li>
+</ul>
+<h4 *ngIf="users?.length == 0">No Users Found</h4>
+<!-- an alternate would be to use a template if else got true -->
+<!-- <ng-template #noUsers> 
+    <h4>No User Found</h4>
+</ng-template> -->
+
+<h4 *ngIf="!loaded">Loading Users...</h4>
